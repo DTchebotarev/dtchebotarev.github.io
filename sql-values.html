@@ -1,0 +1,83 @@
+<html>
+  <head>
+    <title>Google sheets to SQL values</title>
+    <script type='text/javascript'>
+
+      const TABLE_STRING = 'This is what you pasted in:\n'
+      const SQL_STRING = 'This is the SQL generated for you:\n'
+
+      function parseLine(text, isHeader = false) {
+
+        const cells = text.split('\t');
+        
+        const tableRow = document.createElement('tr');
+        const sqlCells = [];
+        for (cell of cells) {
+          let tableCell = isHeader ? document.createElement('td') : document.createElement('th');
+          tableCell.innerHTML = cell;
+          tableRow.appendChild(tableCell);
+          let formattedCell;
+          if (cell.length == 0 || cell[0] == '#') {
+             formattedCell = ['NULL'];
+          } else if (!isNaN(cell)) {
+             formattedCell = [cell];
+          }
+          else {
+             formattedCell = isHeader ? [cell] : ["'" + cell.replaceAll("'", "''") + "'"];
+          };
+          sqlCells.push(formattedCell);
+        }
+        
+        const sqlLine = '(' + sqlCells.join(',') + ')';
+
+        return [sqlLine, tableRow];
+      }
+
+      function parseTable(text) {
+        
+        const sqlLines = [];
+        const table = document.createElement('table');
+
+        const lines = text.split('\n')
+
+        const [parsedHeaderSQL, parsedHeaderTable] = parseLine(lines.shift(), isHeader = true);
+        table.appendChild(parsedHeaderTable);
+
+        for (line of lines) {
+          const [sqlLine, tableRow] = parseLine(line);
+          sqlLines.push(sqlLine);
+          table.appendChild(tableRow);
+        }
+
+        const sql = '( VALUES\n' + sqlLines.join(',\n') + ') as t' + parsedHeaderSQL;
+        const codeBlock = document.createElement('code');
+        codeBlock.innerText = sql
+
+        return [codeBlock, table];
+      }
+
+
+      document.addEventListener("paste", (event) => {
+
+          event.preventDefault();
+          const paste = (event.clipboardData || window.clipboardData).getData('text');
+          const [sql, table] = parseTable(paste);
+
+          document.getElementById('table').innerHTML = '';
+          document.getElementById('table').innerText = TABLE_STRING;
+          document.getElementById('table').appendChild(table);
+
+          document.getElementById('sql').innerHTML = '';
+          document.getElementById('sql').innerText = SQL_STRING;
+          document.getElementById('sql').appendChild(sql);
+
+      });
+
+    </script>
+  </head>
+  <body>
+    <div>Hit ctrl/cmd + v to paste from google sheets</div><br>
+    <div id = 'table'></div><br>
+    <div id = 'sql'></div>
+  </body>
+</html>
