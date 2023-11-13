@@ -30,7 +30,7 @@
           sqlCells.push(formattedCell);
         }
         
-        const sqlLine = (isHeader ? '(' : '  (') + sqlCells.join(',') + ')';
+        const sqlLine = (isHeader ? '(' : '  (') + sqlCells.join(', ') + ')';
 
         return [sqlLine, tableRow];
       }
@@ -40,7 +40,7 @@
         const sqlLines = [];
         const table = document.createElement('table');
 
-        const lines = text.split('\n')
+        const lines = text.split('\n');
 
         const [parsedHeaderSQL, parsedHeaderTable] = parseLine(lines.shift(), isHeader = true);
         table.appendChild(parsedHeaderTable);
@@ -52,7 +52,7 @@
         }
 
         final_sql = '( VALUES\n' + sqlLines.join(',\n') + '\n) AS t' + parsedHeaderSQL;
-        const codeBlock = document.createElement('code');
+        const codeBlock = document.createElement('pre');
         codeBlock.innerText = final_sql;
         codeBlock.setAttribute('id','sql_code');
 
@@ -81,7 +81,6 @@
       });
 
       function copyToClipboard() {
-
         navigator.clipboard.writeText(final_sql).then(
           () => {
             document.getElementById('copy_button').innerText = 'Copied!';
@@ -95,22 +94,36 @@
   </head>
   <body>
     <h1>TSV to SQL values</h1>
-    <section>
-      <div><mark>TL;DR</mark> Paste (<kbd>cmd + v</kbd> or <kbd>ctrl + v</kbd>) data from google sheets,
-      or any other tsv data, and see your data transformed into a SQL <code>VALUES</code> statement.</div>
-      <div id = 'instructions2' hidden=true class='notice'>Do this as many times as you need.</div>
+    <div>
+      <mark>TL;DR</mark> Paste (<kbd>cmd + v</kbd> or <kbd>ctrl + v</kbd>) data from google sheets,
+      or any other tsv data, and see your data transformed into a SQL <code>VALUES</code> statement.
+      <br><br>
+      Features of this tool:
+      <ul>
+        <li>100% offline, no data ever leaves your browser.</li>
+        <li>Empty cells, cells with errors (in fact any cell starting with <code>#</code>) are cast as NULL.</li>
+        <li>Cells with numbers are cast as numbers.</li>
+        <li>Cells with text are cast as strings, single quotes are escaped.</li>
+      </ul>
+      This tool expects a header row, and that the header column names are valid SQL column names.
+    </div>
+    <div hidden=true class='notice'>Do this as many times as you need.</div>
+    <article hidden=true>
+      The data you pasted has been transformed into a SQL <code>VALUES</code> statement.
+      <br><br>
+      <button onclick='copyToClipboard()' id='copy_button'>Copy SQL to clipboard</button>
+      <br><br>
       <details hidden=true>
         <summary>Here is the data you pasted:</summary>
         <div id = 'table'></div>
       </details>
-    </section>
-    <section hidden=true>
-      The data you pasted has been transformed into a SQL <code>VALUES</code> statement.
-      <button onclick='copyToClipboard()' id='copy_button'>Copy SQL to clipboard</button>
       <details>
         <summary>Here is the SQL generated for you:</summary>
         <div id = 'sql'></div>
       </details>
+    </article>
+    <section>
+      <div>Find the code on <a href="https://github.com/dtchebotarev/dtchebotarev.github.io">github</a>.</div>
     </section>
   </body>
 </html>
