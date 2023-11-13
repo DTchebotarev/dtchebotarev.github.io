@@ -1,10 +1,12 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <title>Google sheets to SQL values</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <title>TSV to SQL values</title>
     <script type='text/javascript'>
 
-      const TABLE_STRING = 'This is what you pasted in:\n'
-      const SQL_STRING = 'This is the SQL generated for you:\n'
+      let final_sql;
+      const INSTRUCTIONS_STRING = 'Hit ctrl/cmd + v to paste from google sheets (or any other tsv data). Do this as many times as you need.\n'
 
       function parseLine(text, isHeader = false) {
 
@@ -28,7 +30,7 @@
           sqlCells.push(formattedCell);
         }
         
-        const sqlLine = '(' + sqlCells.join(',') + ')';
+        const sqlLine = (isHeader ? '(' : '  (') + sqlCells.join(',') + ')';
 
         return [sqlLine, tableRow];
       }
@@ -49,35 +51,66 @@
           table.appendChild(tableRow);
         }
 
-        const sql = '( VALUES\n' + sqlLines.join(',\n') + ') as t' + parsedHeaderSQL;
+        final_sql = '( VALUES\n' + sqlLines.join(',\n') + '\n) AS t' + parsedHeaderSQL;
         const codeBlock = document.createElement('code');
-        codeBlock.innerText = sql
+        codeBlock.innerText = final_sql;
+        codeBlock.setAttribute('id','sql_code');
 
         return [codeBlock, table];
       }
 
+      function updatePage(sql, table) {
+        document.getElementById('table').innerHTML = '';
+        document.getElementById('table').appendChild(table);
+
+        document.getElementById('sql').innerHTML = '';
+        document.getElementById('sql').appendChild(sql);
+
+        for (el of document.querySelectorAll("[hidden=true]")) {
+          el.hidden = false;
+        };
+
+      };
 
       document.addEventListener("paste", (event) => {
-
-          event.preventDefault();
-          const paste = (event.clipboardData || window.clipboardData).getData('text');
-          const [sql, table] = parseTable(paste);
-
-          document.getElementById('table').innerHTML = '';
-          document.getElementById('table').innerText = TABLE_STRING;
-          document.getElementById('table').appendChild(table);
-
-          document.getElementById('sql').innerHTML = '';
-          document.getElementById('sql').innerText = SQL_STRING;
-          document.getElementById('sql').appendChild(sql);
+        event.preventDefault();
+        const paste = (event.clipboardData || window.clipboardData).getData('text');
+        const [sql, table] = parseTable(paste);
+        updatePage(sql, table);
 
       });
+
+      function copyToClipboard() {
+
+        navigator.clipboard.writeText(final_sql).then(
+          () => {
+            document.getElementById('copy_button').innerText = 'Copied!';
+            setTimeout(function() { document.getElementById('copy_button').innerText = 'Copy SQL to clipboard'; }, 2000);
+          }
+        );
+
+      };
 
     </script>
   </head>
   <body>
-    <div>Hit ctrl/cmd + v to paste from google sheets</div><br>
-    <div id = 'table'></div><br>
-    <div id = 'sql'></div>
+    <h1>TSV to SQL values</h1>
+    <section>
+      <div><mark>TL;DR</mark> Paste (<kbd>cmd + v</kbd> or <kbd>ctrl + v</kbd>) data from google sheets,
+      or any other tsv data, and see your data transformed into a SQL <code>VALUES</code> statement.</div>
+      <div id = 'instructions2' hidden=true class='notice'>Do this as many times as you need.</div>
+      <details hidden=true>
+        <summary>Here is the data you pasted:</summary>
+        <div id = 'table'></div>
+      </details>
+    </section>
+    <section hidden=true>
+      The data you pasted has been transformed into a SQL <code>VALUES</code> statement.
+      <button onclick='copyToClipboard()' id='copy_button'>Copy SQL to clipboard</button>
+      <details>
+        <summary>Here is the SQL generated for you:</summary>
+        <div id = 'sql'></div>
+      </details>
+    </section>
   </body>
 </html>
