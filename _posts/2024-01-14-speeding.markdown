@@ -1,0 +1,78 @@
+---
+layout: default
+title:  "Speeding on Hunter's Run Dr"
+date:   2024-01-14 00:34:13 -0500
+permalink: /speeding/
+---
+
+# Intro
+
+In a [recent news story](https://ottawa.ctvnews.ca/orleans-residents-question-city-s-decision-to-remove-street-from-list-to-prevent-speeding-1.6709773) I question the City of Ottawa's decision making around using the speedboard on my street (Hunter's Run Drive in Orleans) to make decisions about safety.
+I wasn't aware this was how the speedboard is used - in fact I only learned about it form the [previous news story](https://ottawa.ctvnews.ca/orleans-residents-raise-issue-of-speeding-after-pedestrian-hit-at-intersection-1.6706289).
+This is a problem for several reasons:
+
+1. The speedboard faces the wrong way.
+2. The speedboard is solar powered and off during rush hour.
+3. The speedboard captures cross traffic from Jeanne D'Arc Boulevard, which artificially and erroneously reduces the logged speeds. Operating speeds are erroneously recorded as 42 kph, when in reality they are around 48 kph!
+
+In this post I'll be focussing on the third point, and explaining why this is such an issue.
+The conclusion is that *** by the City's current rules our street should qualify for a detailed traffic study***.
+The only reason that our street has been removed from the traffic assessment waiting list is because of a botched speedboard installation.
+
+# The problem
+
+In her [interview](https://ottawa.ctvnews.ca/orleans-residents-raise-issue-of-speeding-after-pedestrian-hit-at-intersection-1.6706289), Councillor Laura Dudas says that based on the speedboard data from Hunter's Run Dr the street doesn't qualify for additional traffic study.
+When pressed, the City shared with me this [linked document](https://pub-ottawa.escribemeetings.com/filestream.ashx?DocumentId=134436) which indicates that the City looks at the operating speeds (i.e. the 85th percentile of traffic speed) to determine elegibility.
+If the operating speed is 6 km/h above the posted limit or greater, then it triggers a detailed traffic study. 
+
+The issue here is that the way the speed board is oriented, the sensor faces a busy intersection.
+This means that cars travelling perpendicular to the speed board trigger false readings, and when the City analyzes the data they have no way of knowing which readings are "real" and which are just cross traffic. 
+
+```
+            |              |
+            | Hunter's Run |
+            |              |
+------------               ------------
+Jeanne D'Arc
+------------               ------------
+            |              |
+            |              |
+            |              |
+            |              |
+            |              |
+            |              |
+            |              |
+       /|\  |              |
+        |   |              |
+        |   |              |
+      speed |              |
+      board |              |
+            |              |
+            |              |
+```
+
+But how much of a problem is this? What would the conclusions be if the sensor was oriented correctly and only captured traffic from Hunter's Run Dr? 
+
+# The data
+
+To do this, we should need to collect some data on which sensor readings are real Hunter's Run Dr traffic and which are cross traffic.
+To do this, I set up my camera on a tripod in my car and recorded an hour of footage from my driveway.
+It's been uploaded to YouTube and you can view it at the following links:
+
+* [https://www.youtube.com/watch?v=ISkf2iT9mkY](https://www.youtube.com/watch?v=ISkf2iT9mkY)
+* [https://www.youtube.com/watch?v=UqDf2mnc2T0](https://www.youtube.com/watch?v=UqDf2mnc2T0)
+
+(I had to split the recording in two because my camera has a 30 minute recording limit.)
+
+Next, we need to go through the hour of footage, whenever the speed board is triggered write down the time stamp and whether or not there was a car present on the street, or if it was simply cross traffic.
+I've done this for the entire video, and the results are available in a [google sheet](https://docs.google.com/spreadsheets/d/1D1AztECohAJBqU2RXyMbYWW_F8b52Wj1XaDfcsUg7Ds/edit#gid=0).
+
+# The results
+
+So what can we learn from this? First, the striking conclusion is that 3/4 of all the data that's being logged by the speed board is cross traffic - 74% to be exact.
+But having these data allows me to go one step further and actually see what would happen if the data was logged correctly from the start. 
+
+In the "combined" dataset which includes both the cross traffic and Hunter's Run traffic, the operating speed is 42 kph.
+However, if we remove the cross traffic and only look at the real Hunter's Run traffic we see that the operating speed is 47.5 kph, well above the 40 kph speed limit!
+Furthermore, recall that if the operating speeds exceed 6 kph, then the street qualifies for a more in-depth traffic study. 
+This means that the traffic on Hunter's Run Drive *is* in fact travelling fast enough to qualify.
